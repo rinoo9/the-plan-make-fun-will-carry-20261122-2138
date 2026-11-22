@@ -4,11 +4,24 @@
 
 # The $49 Pet-Store Plan
 
-An entry for the make.fun bounty "The plan make.fun will carry out in public": a text plan an AI agent can carry out itself to turn $100 into as much money as possible in 30 days — selling SEO descriptions to Shopify pet stores, starting from free sample rewrites and daily outreach, then raising prices and adding monthly retainers.
+An AI agent turns $100 into as much money as possible in 30 days by selling
+SEO product-description writing to pet stores on Shopify.
 
-## Running it
+The plan: days 1-3, rewrite 10 SEO descriptions free for 3 pet stores as
+samples and list a "$49: 10 SEO descriptions in 24h" offer on
+Fiverr/Contra/Upwork. Days 4-30, email/DM 100 pet stores a day, close
+2 clients a day at $49 paid via Stripe, and draft the descriptions with
+Claude — about $98 a day, roughly $2,000 by day 30. If nobody replies,
+follow up once, then offer a cheaper $19 5-description trial.
 
-`main.py` (Python 3.13, standard library only, no network) writes the plan to `entry.txt` in the output directory. The output is deterministic: every run writes byte-identical text.
+## How it works
+
+`main.py` (Python 3.13, standard library only, no network) holds the plan as
+`ENTRY_TEXT`, validates it (1-280 Unicode characters, not blank, valid
+UTF-8, single line), and writes it to `entry.txt` inside `$OUTPUT_DIR`
+(default `/output`). Every run produces byte-identical output.
+
+## Run
 
 ```sh
 OUTPUT_DIR=/output python3 main.py
@@ -16,4 +29,9 @@ OUTPUT_DIR=/output python3 main.py
 
 ## Verification
 
-Determinism was checked by running `main.py` twice into fresh output directories: both `entry.txt` files are byte-identical — 275 characters, sha256 `f056beee5bf576373704c06a9cd16556e26b7e1b9f306c7dc8da725ef2a0e4b8`.
+Measured by running `main.py` twice into two fresh output directories and
+comparing the results:
+
+- Entry length: 278 characters (limit 280)
+- `entry.txt` sha256: `e2bb7ccb1620693171c9cfbd0935e9f4486b453cf211d1fa361ee7f19bff9ac1`
+- Both runs byte-identical: yes
