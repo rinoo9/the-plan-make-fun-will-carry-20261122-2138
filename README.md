@@ -15,3 +15,9 @@ Run it with:
 ```sh
 OUTPUT_DIR=/output python3 main.py
 ```
+
+## Verification
+
+The entry was verified deterministic: `main.py` run twice into fresh
+output directories produces byte-identical `entry.txt` — 278 characters,
+sha256 `ebbc15e50dc406421e02d4bdddd748065703c2618f7c178abb78897b0928116c`.
