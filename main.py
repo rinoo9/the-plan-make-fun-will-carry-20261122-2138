@@ -1,61 +1,52 @@
-"""Write the make.fun text entry for the pet-store plan bounty.
+#!/usr/bin/env python3
+"""Generate entry.txt: a 30-day plan for an AI agent to turn $100 into as
+much money as possible by selling SEO product-description writing to pet
+stores on Shopify.
 
-The program assembles a concrete 30-day plan for an AI agent to turn
-$100 into as much money as possible, then writes it to entry.txt.
-The output is deterministic: identical bytes on every run.
+Standard library only. No network access. Deterministic: every run writes
+byte-identical output.
 """
 
+import hashlib
+import os
 import sys
-from os import environ
-from pathlib import Path
 
-MAX_CODE_POINTS = 280
-
-PHASES = (
-    "Days 1-3: rewrite 30 pages free for 3 Shopify pet stores; post proof. ",
-    "Offer '$49 for 10 SEO descriptions in 24 hours' on Fiverr and Upwork. ",
-    "Daily: DM 50 stores, attach one free rewrite. ",
-    "Close 2 a day = $98. ",
-    "Days 15-30: raise to $79, add $199/mo plans. ",
-    "Goal: $2,900 by day 30.",
+ENTRY_TEXT = (
+    "Day 1-3: rewrite 10 SEO descriptions free for 3 pet Shopify stores; "
+    "list '$49: 10 SEO descriptions in 24h' on Fiverr/Contra/Upwork. "
+    "Days 4-30: DM 100 pet stores daily, close 2/day at $49 via Stripe, "
+    "draft with Claude. ~$2,000 by day 30. "
+    "No replies? Follow up, offer a $19 trial."
 )
 
-
-def build_plan() -> str:
-    """Join the plan phases into the single entry text."""
-    return "".join(PHASES)
+MAX_CHARS = 280
 
 
-def check_plan(text: str) -> None:
-    """Fail loudly unless the entry fits the bounty text limits."""
-    points = len(text)
-    if points < 1 or points > MAX_CODE_POINTS:
-        sys.exit(f"entry must be 1-{MAX_CODE_POINTS} code points, got {points}")
-    if not text.strip():
-        sys.exit("entry must not be only whitespace")
-    if "$" not in text:
-        sys.exit("entry must name a price")
-    try:
-        text.encode("utf-8")
-    except UnicodeEncodeError as problem:
-        sys.exit(f"entry is not valid UTF-8: {problem}")
+def validate_entry(text: str) -> None:
+    """ENTRY_TEXT must be 1-280 Unicode characters, not blank, valid UTF-8."""
+    if not text or not text.strip():
+        raise ValueError("entry text must not be empty or whitespace-only")
+    if len(text) > MAX_CHARS:
+        raise ValueError(
+            f"entry text is {len(text)} characters, over the {MAX_CHARS} limit"
+        )
+    if "\n" in text or "\r" in text:
+        raise ValueError("entry text must be a single line, no newlines")
+    text.encode("utf-8")  # raises UnicodeEncodeError if not valid UTF-8
 
 
-def entry_file() -> Path:
-    """Return the entry.txt path, honouring OUTPUT_DIR when set."""
-    folder = environ.get("OUTPUT_DIR", "/output")
-    return Path(folder) / "entry.txt"
-
-
-def run() -> None:
-    """Build, validate and write the entry text."""
-    plan = build_plan()
-    check_plan(plan)
-    target = entry_file()
-    target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("w", encoding="utf-8", newline="") as handle:
-        handle.write(plan)
+def main() -> int:
+    validate_entry(ENTRY_TEXT)
+    output_dir = os.environ.get("OUTPUT_DIR", "/output")
+    os.makedirs(output_dir, exist_ok=True)
+    path = os.path.join(output_dir, "entry.txt")
+    data = ENTRY_TEXT.encode("utf-8")
+    with open(path, "wb") as fh:
+        fh.write(data)
+    digest = hashlib.sha256(data).hexdigest()
+    print(f"wrote {path}: {len(ENTRY_TEXT)} chars, sha256 {digest}")
+    return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    sys.exit(main())
