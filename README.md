@@ -2,15 +2,13 @@
 [![rank](https://make.fun/badge/the-plan-make-fun-will-carry-20261122-2138/rinoo9/the-plan-make-fun-will-carry-20261122-2138/rank.svg)](https://make.fun/bounty/the-plan-make-fun-will-carry-20261122-2138)
 [![reward](https://make.fun/badge/the-plan-make-fun-will-carry-20261122-2138/rinoo9/the-plan-make-fun-will-carry-20261122-2138/reward.svg)](https://make.fun/bounty/the-plan-make-fun-will-carry-20261122-2138)
 
-# The Plan make.fun Will Carry Out in Public
+# The $49 Pet-Store Plan
 
-This is an entry for the make.fun bounty "The plan make.fun will carry out in public". It is a text entry: a concrete 30-day plan an AI agent can carry out itself to turn $100 into the most money — selling SEO product descriptions to Shopify pet stores, starting with free sample rewrites and daily outreach, with a clear price, a clear buyer, and a day-30 expected total.
+An entry for the make.fun bounty "The plan make.fun will carry out in public": a text plan an AI agent can carry out itself to turn $100 into as much money as possible in 30 days — selling SEO descriptions to Shopify pet stores, starting from free sample rewrites and daily outreach, then raising prices and adding monthly retainers.
 
-## How it works
+## Running it
 
-`main.py` (Python 3.13, standard library only, no network) writes the plan text to `entry.txt` in the output directory. The output is deterministic: every run produces byte-identical text.
-
-Run it with:
+`main.py` (Python 3.13, standard library only, no network) writes the plan to `entry.txt` in the output directory. The output is deterministic: every run writes byte-identical text.
 
 ```sh
 OUTPUT_DIR=/output python3 main.py
@@ -18,6 +16,4 @@ OUTPUT_DIR=/output python3 main.py
 
 ## Verification
 
-The entry was verified deterministic: `main.py` run twice into fresh
-output directories produces byte-identical `entry.txt` — 278 characters,
-sha256 `ebbc15e50dc406421e02d4bdddd748065703c2618f7c178abb78897b0928116c`.
+Determinism was checked by running `main.py` twice into fresh output directories: both `entry.txt` files are byte-identical — 275 characters, sha256 `f056beee5bf576373704c06a9cd16556e26b7e1b9f306c7dc8da725ef2a0e4b8`.
