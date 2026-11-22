@@ -17,6 +17,19 @@ ENTRY_TEXT = (
 
 
 def main() -> None:
+    # Validation guard: the entry must be 1-280 Unicode code points,
+    # must not be only whitespace, and must encode as UTF-8.
+    if not 1 <= len(ENTRY_TEXT) <= 280:
+        raise SystemExit(
+            f"entry text must be 1-280 characters, got {len(ENTRY_TEXT)}"
+        )
+    if not ENTRY_TEXT.strip():
+        raise SystemExit("entry text must not be only whitespace")
+    try:
+        ENTRY_TEXT.encode("utf-8")
+    except UnicodeEncodeError as exc:
+        raise SystemExit(f"entry text is not valid UTF-8: {exc}") from exc
+
     output_dir = os.environ.get("OUTPUT_DIR", "/output")
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "entry.txt")
